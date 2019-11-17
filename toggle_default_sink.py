@@ -9,8 +9,7 @@
 from sys import argv
 from subprocess import getoutput, call
 
-from audio_sinks import audio_sinks
-default_sink_file = "default-sink.tmp"
+from audio_sinks import audio_sinks, cache_file as default_sink_file
 
 # Get current default sink (index)
 try:

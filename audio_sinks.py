@@ -6,6 +6,7 @@
 # This file we specifies which audio sinks (by name) to toggle through.
 # The order of the sinks will the same as the toggle order.
 
+cache_file = "default-sink.tmp"
 audio_sinks = [
     # Edit/Add yours sinks here
     #
