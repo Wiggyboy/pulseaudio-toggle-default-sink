@@ -6,6 +6,7 @@
 # This will toggle through the audio sinks defined in audio-sinks.py
 # and set the toggled audio sink as default audio sink for PulseAudio.
 
+from sys import argv
 from audio_sinks import audio_sinks
 default_sink_file = "default-sink.tmp"
 
@@ -20,7 +21,24 @@ except (OSError, ValueError):
     # Either way assume ...
     sink_index = 0
 
+# Toggle either forward/backwards with next/prev.
+# If no input or faulty input is given,
+# just redo the set of current default sink.
+
+if (len(argv) > 1):
+    toggle_operation = argv[1]
+
+    if (toggle_operation == "next"):
+        sink_index += 1
+    elif (toggle_operation == "prev" or toggle_operation == "previous"):
+        sink_index -= 1
+
+# Ensure sink_index is within the indicies of audio_sinks
+sink_index = sink_index % len(audio_sinks)
+
+
 # TODO set default sink
+
 
 # Save current default sink (index)
 try:
@@ -29,6 +47,6 @@ try:
 
 except OSError:
     # TODO handle this error properly
-    print("Fail to write to file")
+    pass
 
 
