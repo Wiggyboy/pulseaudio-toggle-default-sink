@@ -44,7 +44,7 @@ audio_sink = audio_sinks[sink_index]
 call("pactl set-default-sink " + audio_sink, shell=True)
 
 # Update/Move the current audio sources to use the new default sink
-get_audio_srcs_cmd = "pacmd list-sink-inputs | grep -o -P '(?<=index:\s)[0-9]+'"
+get_audio_srcs_cmd = "pacmd list-sink-inputs | grep -o -P '(?<=index:\\s)[0-9]+'"
 audio_srcs = list(getoutput(get_audio_srcs_cmd).split())
 
 move_audio_srcs_cmds = []
