@@ -7,6 +7,8 @@
 # and set the toggled audio sink as default audio sink for PulseAudio.
 
 from sys import argv
+from subprocess import getoutput, call
+
 from audio_sinks import audio_sinks
 default_sink_file = "default-sink.tmp"
 
@@ -35,10 +37,23 @@ if (len(argv) > 1):
 
 # Ensure sink_index is within the indicies of audio_sinks
 sink_index = sink_index % len(audio_sinks)
+audio_sink = audio_sinks[sink_index]
 
 
-# TODO set default sink
+# Set the default sink
+call("pactl set-default-sink " + audio_sink, shell=True)
 
+# Update/Move the current audio sources to use the new default sink
+get_audio_srcs_cmd = "pacmd list-sink-inputs | grep -o -P '(?<=index:\s)[0-9]+'"
+audio_srcs = list(getoutput(get_audio_srcs_cmd).split())
+
+move_audio_srcs_cmds = []
+for audio_src in audio_srcs:
+    move_audio_srcs_cmds.append("pacmd move-sink-input " + audio_src + " " + audio_sink)
+
+if (len(move_audio_srcs_cmds) > 0):
+    move_audio_srcs_cmd = " & ".join(move_audio_srcs_cmds)
+    call(move_audio_srcs_cmd, shell=True)
 
 # Save current default sink (index)
 try:
