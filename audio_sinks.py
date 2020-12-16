@@ -22,8 +22,8 @@ if (len(audio_sinks) == 0):
     from subprocess import getoutput
     from textwrap import dedent
 
-    get_available_audio_sinks_cmd = "pactl list sinks short | grep -o -P '(?<=^[0-9]\\s)[A-z0-9\\.\\-\\_]+'"
-    available_audio_sinks = list(getoutput(get_available_audio_sinks_cmd).split())
+    get_available_audio_sinks_cmd = "pactl list sinks short | grep -o -P '^[0-9]+\\s[A-z0-9\\.\\-\\_]+'"
+    available_audio_sinks = list(getoutput(get_available_audio_sinks_cmd).split()[1::2])
 
     print(dedent("""\
         audio_sinks cannot be empty.
